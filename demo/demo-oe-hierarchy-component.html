@@ -1,0 +1,175 @@
+<!--
+  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+  Bangalore, India. All Rights Reserved.
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>oe-hierarcy-component demo</title>
+    <link rel="import" href="../../polymer/polymer.html">
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../oe-hierarchy-component.html">
+    <link rel="import" href="custom-node.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles"></style>
+</head>
+
+<body unresolved>
+    <div class="vertical-section-container">
+        <h3>Hierarchy component</h3>
+        <demo-snippet>
+            <template>
+                <template is="dom-bind" id="hierarchy">
+                    <oe-hierarchy-component id="hierarchy-component" data={{data}}>
+                    </oe-hierarchy-component>
+                </template>
+                <script>
+                    var target = document.getElementById('hierarchy');
+                    var data = {
+                        label: "MTN Holdings",
+                        children: [{
+                            label: "MTN Intl",
+                            children: [{
+                                    label: "MTN Marutis",
+                                    children: [{
+                                        label: "MTN Telecom",
+                                       children: [{
+                                                label: "MTN Nigeria"
+                                            },
+                                            {
+                                                label: "MTN Uganda"
+                                            }
+                                        ]
+                                    }]
+                                },
+                                {
+                                    label: "Investcom llc"
+                                },
+                                {
+                                    label: "MTN Dubai",
+                                    children: [{
+                                            label: "MTN Telecom (Dubai)",
+                                            children: [{
+                                                label: "MTN Ghana"
+                                            }, {
+                                                label: "MTN Sudan"
+                                            }]
+                                        },
+                                        {
+                                            label: "Mednet"
+                                        }
+                                    ]
+                                },
+                                {
+                                    label: "MTN Swaziland"
+                                }
+                            ]
+                        }]
+                    }
+                    target.set('data',data);
+                </script>
+            </template>
+        </demo-snippet>
+        <h3>Hierarchy component with customized node</h3>
+        <demo-snippet>
+            <template>
+                <template is="dom-bind" id="hierarchy-custom">
+                    <style is="custom-style"> 
+                        #hierarchy-custom-component{
+                            --oe-connector-color:red;
+                            --oe-connector-thickness:2px;
+                            --oe-connector-selected:green;
+                        }
+                    </style>
+                    <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item">
+                        <template>
+                            <custom-node data="{{item}}" show-children="[[showChildren]]"></custom-node>
+                        </template>
+                    </oe-hierarchy-component>
+                </template>
+                <script>
+                    var target2 = document.getElementById('hierarchy-custom');
+                    var data2 = {
+                        name: "MTN Holdings",
+                        children: [{
+                            name: "MTN Intl",
+                            children: [{
+                                    name: "MTN Marutis",
+                                    id: "GPIF003",
+                                    type: "GPIF",
+                                    children: [{
+                                        name: "MTN Telecom",
+                                        id: "GCIF001",
+                                        type: "GCIF",
+                                        children: [{
+                                                name: "MTN Nigeria",
+                                                id: "ECIF005",
+                                                type: "ECIF",
+                                                children: []
+                                            },
+                                            {
+                                                name: "MTN Uganda",
+                                                id: "ECIF006",
+                                                type: "ECIF",
+                                                children: []
+                                            }
+                                        ]
+                                    }]
+                                },
+                                {
+                                    name: "Investcom llc",
+                                    id: "GPIF004",
+                                    type: "GPIF",
+                                    children: []
+                                },
+                                {
+                                    name: "MTN Dubai",
+                                    id: "GPIF005",
+                                    type: "GPIF",
+                                    children: [{
+                                            name: "MTN Telecom (Dubai)",
+                                            id: "GCIF002",
+                                            type: "GCIF",
+                                            children: [{
+                                                name: "MTN Ghana",
+                                                id: "ECIF007",
+                                                type: "ECIF",
+                                                children: []
+                                            }, {
+                                                name: "MTN Sudan",
+                                                id: "ECIF008",
+                                                type: "ECIF",
+                                                children: []
+                                            }]
+                                        },
+                                        {
+                                            name: "Mednet",
+                                            id: "ECIF004",
+                                            type: "ECIF",
+                                            children: []
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: "MTN Swaziland",
+                                    id: "ECIF003",
+                                    type: "ECIF",
+                                    children: []
+                                }
+                            ]
+                        }]
+                    }
+                    target2.set('data',data2);
+                </script>
+            </template>
+        </demo-snippet>
+    </div>
+</body>
+
+</html>

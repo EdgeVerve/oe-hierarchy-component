@@ -1,0 +1,207 @@
+<!-- 
+  ©2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+  Bangalore, India. All Rights Reserved.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="oe-hierarchy-node.html">
+<script src="../oe-utils/oe-utils.js"></script>
+<!--
+### oe-hierarchy-component
+
+`<oe-hierarchy-component>` is a control to recursively render a tree structured data.
+
+### Styling
+
+The following custom properties and mixins are available for styling:
+
+CSS Variable | Description | Default
+----------------|-------------|----------
+`--oe-connector-color` | line color that connects the different nodes | `--primary-color`
+`--oe-node-detail` | Mixin for the node | `{}`
+
+@demo demo/demo-oe-hierarchy-component.html
+-->
+<link rel="import" href="oe-hierarchy-node.html">
+<dom-module id="oe-hierarchy-component">
+    <template>
+        <style>
+            :host {
+                position: relative;
+                display: block;
+                box-sizing: border-box;
+                padding: 16px;
+            }
+
+            oe-hierarchy-node {
+                --path-color: var(--oe-connector-color,#0288d1);
+                --connector-thickness:var(--oe-connector-thickness,4px);
+                --connector-selected-color:var(--oe-connector-selected,red);
+            }
+        </style>
+        <div class="component-container">
+            <oe-hierarchy-node data={{data}} children-key=[[childrenKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]]
+                unique-key=[[uniqueKey]] node-data-as=[[nodeDataAs]] is-parent-node></oe-hierarchy-node>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "oe-hierarchy-component",
+            /**
+             * Fired when connector before a node is selected.
+             *
+             * @event pre-connector-selected
+             */
+            
+            /**
+             * Fired when connector after a node is selected.
+             *
+             * @event post-connector-selected
+             */
+
+            /**
+             * Fired when an node is selected
+             *
+             * @event node-selected
+             */
+
+            /**
+             * Fired when any of the selected element are reset.
+             *
+             * @event deselect-item
+             */
+
+            /**
+             * Fired when delete key is pressed after a pre-connector is selected.
+             * Denotes that the current child is removed from its parent obcject.
+             *
+             * @event unlink-child-node
+             */
+
+            /**
+             * Fired when delete key is pressed after a post-connector is selected.
+             * Denotes that the current parent node request removal of all children.
+             *
+             * @event unlink-all-child-node
+             */
+
+            /**
+             * Fired when delete key is pressed after a node is selected.
+             * Denotes that the current node request deletion.
+             *
+             * @event remove-node
+             */
+            properties: {
+                /**
+                 * The data based on which the tree is rendered.
+                 */
+                data: {
+                    type: Object
+                },
+                /**
+                 * The property name of array containing the next level nodes.
+                 */
+                childrenKey: {
+                    type: String,
+                    value: "children"
+                },
+                /**
+                 * The list of actions that are available in the node in addition to add/edit.
+                 */
+                nodeActions: {
+                    type: Array,
+                    value: function () {
+                        return []
+                    }
+                },
+                /**
+                 * The property name to get node data in local DOM implementation.
+                 */
+                nodeDataAs: {
+                    type: String
+                }
+            },
+            behaviors: [Polymer.Templatizer],
+            listeners: {
+                'node-item-selected': '_nodeItemSelected',
+                'reset-selected': '_resetSelected'
+            },
+            ready: function () {
+                if (!this.ctor) {
+                    const nodeTemplate = this.queryEffectiveChildren('template');
+                    if (nodeTemplate) {
+                        this.set('_nodeTemplate', nodeTemplate);
+                    }
+                }
+            },
+            attached: function () {
+                this.selectedData = {};
+            },
+            _nodeItemSelected: function (event) {
+                var key = event.detail.key;
+                if (key !== this.selectedData.key) {
+                    var prevSelected = this.querySelector('[key="' + this.selectedData.key + '"]');
+                    if (prevSelected) {
+                        prevSelected.classList.remove('selected');
+                    }
+                    var curSelected = this.querySelector('[key="' + key + '"]');
+                    if (curSelected) {
+                        curSelected.classList.add('selected');
+                        var selected = {
+                            key: key,
+                            data: event.detail.data,
+                            type: curSelected.id
+                        }
+                        this.set('selectedData', selected);
+
+                        var eventName = ""
+                        switch (this.selectedData.type) {
+                            case "pre-connector":
+                                eventName = "pre-connector-selected";
+                                break;
+                            case "post-connector":
+                                eventName = "pre-connector-selected";
+                                break;
+                            case "node-detail":
+                                eventName = "node-selected";
+                                break;
+                            default:
+                                eventName = "selection-changed";
+                        }
+                        this.fire(eventName, this.selectedData.data);
+                    }
+                }
+                this.listen(document, 'keydown', '_keyDownListener');
+            },
+            _keyDownListener: function (event) {
+                var key = event.key;
+                if (key === "Delete") {
+                    var eventName = ""
+                    switch (this.selectedData.type) {
+                        case "pre-connector":
+                            eventName = "unlink-child-node";
+                            break;
+                        case "post-connector":
+                            eventName = "unlink-all-child-node";
+                            break;
+                        case "node-detail":
+                            eventName = "remove-node";
+                            break;
+                        default:
+                            eventName = "delete-key-pressed";
+                    }
+                    this.fire(eventName, this.selectedData.data);
+                }
+            },
+            _resetSelected: function (event) {
+                var prevSelected = this.querySelector('[key="' + this.selectedData.key + '"]');
+                if (prevSelected) {
+                    prevSelected.classList.remove('selected');
+                }
+                this.set('selectedData', {});
+                this.fire('deselect-item');
+                this.unlisten(document, 'keydown', '_keyDownListener');
+            }
+        })
+    </script>
+</dom-module>

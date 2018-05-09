@@ -1,0 +1,96 @@
+<dom-module id="custom-node">
+        <template>
+            <style include="iron-flex flex-layout iron-flex-alignment">
+                :host{
+                    position:relative;
+                    display:block;
+                    box-sizing:border-box;
+                }
+                .component-container{
+                    width:150px;
+                    height:100px;
+                    border:1px solid red;
+                    background: #FFF;
+                    border-radius: 4px;
+                }
+                .node-header{
+                    background: red;
+                    height: 30px;
+                    padding: 0px 8px;
+                }
+
+                .node-header label{
+                    color: #FFF;
+                    font-size: 12px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+                .node-header iron-icon{
+                    color: #FFF;
+                    transform: rotate(-90deg);
+                }
+                iron-icon{
+                    --iron-icon-width:16px;
+                    --iron-icon-height:16px;
+                }
+                .node-footer{
+                    height: 30px;
+                    font-size: 12px;
+                }
+
+                .footer-btn iron-icon{
+                    padding: 0px 8px;
+                } 
+
+                .strech-horizontal{
+                    @apply(--layout-horizontal);
+                    @apply(--layout-around-justified);
+                    @apply(--layout-center);
+                }
+            </style>
+            <div class="component-container layout vertical">
+                <div class="node-header strech-horizontal">
+                        <label class="flex">
+                            Name : [[data.name]]
+                        </label>
+                        <iron-icon icon="[[_computeIcon(showChildren)]]" on-tap="_toggle"></iron-icon>
+                </div>
+                <div class="node-main-detail flex layout horizontal center-center">
+                    <label>
+                            Children : [[data.children.length]]
+                    </label>
+                </div>
+                <div class="node-footer strech-horizontal">
+                    <div class="footer-btn  strech-horizontal">
+                        <iron-icon icon="add-circle"></iron-icon>
+                        <label>Add</label>
+                    </div>
+                    <div class="footer-btn  layout horizontal around-justified center">
+                            <iron-icon icon="create"></iron-icon>
+                            <label>Modify</label>
+                    </div>
+                </div>                
+            </div>
+        </template>
+        <script>
+            Polymer({
+                is:"custom-node",
+                properties:{
+                    data:{
+                        type:Object
+                    },
+                    showChildren:{
+                        type:Boolean
+                    }
+                },
+                _toggle:function(){
+                    this.fire('toggle-children');
+                    this.set('showChildren',!this.showChildren);
+                },
+                _computeIcon:function(showChildren){
+                    return showChildren?"expand-less":"expand-more";
+                }
+            })
+        </script>
+    </dom-module>
