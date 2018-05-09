@@ -252,6 +252,9 @@
                 } else if (this.data && this._hasChildren()) {
                     this.set('showChildren', true);
                 }
+                this.async(function(){
+                    this.fire('redraw-connector');
+                },0);
             },
             _showPostConnector: function (showChildren, path) {
                 return this.showChildren && this._hasChildren();
