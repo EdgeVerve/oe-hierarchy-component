@@ -17,7 +17,10 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.0",
     "oe-utils":"^1.0.0",
-    "iron-flex-layout": "1.3.7"
+    "iron-flex-layout": "1.3.7",
+    "paper-item": "^1.0.0",
+    "paper-menu": "^1.0.0",
+    "paper-menu-button": "^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "*",

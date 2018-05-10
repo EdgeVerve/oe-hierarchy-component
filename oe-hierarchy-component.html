@@ -18,7 +18,9 @@ The following custom properties and mixins are available for styling:
 CSS Variable | Description | Default
 ----------------|-------------|----------
 `--oe-connector-color` | line color that connects the different nodes | `--primary-color`
-`--oe-node-detail` | Mixin for the node | `{}`
+`--oe-node-item` | Mixin for the node | `{}`
+`--oe-node-selected` | Mixin for the selected node | `{}`
+
 
 @demo demo/demo-oe-hierarchy-component.html
 -->
@@ -96,7 +98,10 @@ CSS Variable | Description | Default
                  * The data based on which the tree is rendered.
                  */
                 data: {
-                    type: Object
+                    type: Object,
+                    value: function () {
+                        return {}
+                    }
                 },
                 /**
                  * The property name of array containing the next level nodes.
@@ -118,7 +123,8 @@ CSS Variable | Description | Default
                  * The property name to get node data in local DOM implementation.
                  */
                 nodeDataAs: {
-                    type: String
+                    type: String,
+                    value:"data"
                 }
             },
             behaviors: [Polymer.Templatizer],

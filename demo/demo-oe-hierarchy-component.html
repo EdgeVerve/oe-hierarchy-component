@@ -26,7 +26,7 @@
         <demo-snippet>
             <template>
                 <template is="dom-bind" id="hierarchy">
-                    <oe-hierarchy-component id="hierarchy-component" data={{data}}>
+                    <oe-hierarchy-component id="hierarchy-component" data={{data}}  node-actions="[[nodeActions]]">
                     </oe-hierarchy-component>
                 </template>
                 <script>
@@ -72,7 +72,17 @@
                             ]
                         }]
                     }
+                    var actions=[{
+                        icon:"add",
+                        event:"add-node",
+                        label:"Add new node"
+                    },{
+                        icon:"create",
+                        event:"edit-node",
+                        label:"Edit node"
+                    }]
                     target.set('data',data);
+                    target.set('nodeActions',actions);
                 </script>
             </template>
         </demo-snippet>
@@ -85,6 +95,9 @@
                             --oe-connector-color:red;
                             --oe-connector-thickness:2px;
                             --oe-connector-selected:green;
+                            --oe-node-item:{
+                                border-radius:4px;
+                            }
                         }
                     </style>
                     <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item">

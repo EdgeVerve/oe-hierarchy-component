@@ -1,5 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-item/paper-item.html">
 <dom-module id="oe-hierarchy-node">
     <template>
         <style include="iron-flex iron-flex-alignment">
@@ -21,7 +25,7 @@
 
             .node-detail {
                 position: relative;
-                @apply(--oe-node-detail);
+                @apply(--oe-node-item);
             }
 
             .node-default-display{
@@ -82,10 +86,12 @@
                 position: absolute;
                 z-index: 2;
                 height: 28px;
-                top: -30px;
+                right:0px;
+                top: -28px;
                 background: rgba(0, 0, 0, 0.7);
                 color: #FFF;
-                border-radius: 2px;
+                border-radius: 1px;
+                box-sizing: border-box;
                 visibility: hidden;
                 width: 0;
                 opacity: 0;
@@ -102,23 +108,35 @@
             }
 
             .node-detail-container:hover .action-panel {
-                width: 120px;
+                width: 28px;
                 visibility: visible;
                 opacity: 1;
             }
 
+            .node-action-item{
+                font-size: 12px;
+                min-height: 32px;
+                padding: 0 8px;
+            }
+
+            .node-action-item iron-icon{
+                --iron-icon-width:16px;
+                --iron-icon-height:16px;
+                margin-right: 8px;
+            }
         </style>
         <div class="component-container layout horizontal">
             <div class="current-node-detail">
                 <div class="node-detail-container">
-                    <div class="action-panel layout horizontal around-justified center">
-                        <paper-icon-button icon="add" on-tap="_fireEvent" event-name="add-children"></paper-icon-button>
-                        <paper-icon-button icon="create" on-tap="_fireEvent" event-name="edit-node"></paper-icon-button>
-                        <paper-menu-button id="menuBtn" vertical-offset="20">
+                    <div class="action-panel layout horizontal around-justified center" hidden=[[!actions.length]]>
+                        <paper-menu-button id="menuBtn" vertical-offset="20" horizontal-offset="-5">
                             <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
                             <paper-menu class="dropdown-content">
                                 <template is="dom-repeat" items=[[actions]]>
-                                    <paper-item on-tap="_fireEvent" icon$="[[item.icon]]" event-name$="[[item.event]]">[[item.label]]</paper-item>
+                                    <paper-item class="node-action-item" on-tap="_fireEvent" event-name$="[[item.event]]">
+                                        <iron-icon icon$="[[item.icon]]"></iron-icon>
+                                        <label>[[item.label]]</label>
+                                    </paper-item>
                                 </template>
                             </paper-menu>
                         </paper-menu-button>
@@ -165,7 +183,10 @@
                     value: true
                 },
                 actions: {
-                    type: Array
+                    type: Array,
+                    value:function(){
+                        return [];
+                    }
                 },
                 childIndex: {
                     type: Number
