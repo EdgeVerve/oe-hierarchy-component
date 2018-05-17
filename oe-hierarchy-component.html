@@ -42,8 +42,10 @@ CSS Variable | Description | Default
             }
         </style>
         <div class="component-container">
+            <template is="dom-if" if={{data}}>
             <oe-hierarchy-node data={{data}} children-key=[[childrenKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]]
                 unique-key=[[uniqueKey]] node-data-as=[[nodeDataAs]] is-parent-node></oe-hierarchy-node>
+            </template>
         </div>
     </template>
     <script>
@@ -166,7 +168,7 @@ CSS Variable | Description | Default
                                 eventName = "pre-connector-selected";
                                 break;
                             case "post-connector":
-                                eventName = "pre-connector-selected";
+                                eventName = "post-connector-selected";
                                 break;
                             case "node-detail":
                                 eventName = "node-selected";
