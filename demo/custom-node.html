@@ -17,14 +17,25 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 .component-container{
                     width:150px;
                     height:100px;
-                    border:1px solid red;
+                    outline:1px solid red;
                     background: #FFF;
-                    border-radius: 4px;
+                    outline-offset:-1px;
                 }
                 .node-header{
                     background: red;
                     height: 30px;
                     padding: 0px 8px;
+                }
+
+                .type-GCIF{
+                    background: blueviolet;
+                }
+                .type-ECIF{
+                    background: yellowgreen;
+                }
+                .type-GPIF{
+                    background: grey;
+                    color:#FFF;
                 }
 
                 .node-header label{
@@ -58,15 +69,18 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 }
             </style>
             <div class="component-container layout vertical">
-                <div class="node-header strech-horizontal">
+                <div class$="node-header strech-horizontal type-[[data.type]]">
                         <label class="flex">
                             Name : [[data.name]]
                         </label>
-                        <iron-icon icon="[[_computeIcon(showChildren)]]" id="toggleIcon" on-tap="_toggle"></iron-icon>
+                        <iron-icon hidden=[[!hasChildren]] icon="[[_computeIcon(showChildren)]]" id="toggleIcon" on-tap="_toggle"></iron-icon>
                 </div>
                 <div class="node-main-detail flex layout horizontal center-center">
-                    <label>
+                    <label  hidden=[[!hasChildren]] >
                             Children : [[data.children.length]]
+                    </label>
+                    <label  hidden=[[hasChildren]] >
+                            Has no children
                     </label>
                 </div>
                 <div class="node-footer strech-horizontal">
@@ -92,7 +106,12 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                         type:Boolean
                     }
                 },
-                _toggle:function(){
+                observers:['_calculateChildren(data.*)'],
+                _calculateChildren:function(){
+                    this.set('hasChildren',!!(this.data.children && (this.data.children.length > 0)))
+                },
+                _toggle:function(ev){
+                    ev.stopPropagation();
                     this.fire('toggle-children');
                     this.set('showChildren',!this.showChildren);
                 },
