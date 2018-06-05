@@ -162,8 +162,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 <div id="connector" class="connector-lines"></div>
                 <div id="collapse" hidden=[[!showChildren]]>
                     <template is="dom-repeat" items="[[data.children]]">
-                        <oe-hierarchy-node children-key=[[childrenKey]] 
-                        node-template=[[nodeTemplate]] node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]]
+                        <oe-hierarchy-node children-key=[[childrenKey]] node-template=[[nodeTemplate]] 
+                            node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]] parent-data=[[data]]
                             actions=[[actions]] path=[[_getPath(index)]] class="child-nodes" data={{item}}></oe-hierarchy-node>
                     </template>
                 </div>
@@ -177,6 +177,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             properties: {
                 data: {
                     type: Object
+                },
+                parentData:{
+                    type:Object,
+                    value:null
                 },
                 isParentNode: {
                     type: Boolean,
@@ -307,7 +311,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 event.stopPropagation();
                 this.fire('node-item-selected', {
                     key: ("node-"+this.uniqueId),
-                    data: this.data
+                    node: this
                 });
             },
             _selectElement: function (event) {
@@ -316,7 +320,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 var selectedKey = target.getAttribute('key');
                 this.fire('node-item-selected', {
                     key: selectedKey,
-                    data: this.data
+                    node: this
                 })
             },
             _handleTap: function (event) {

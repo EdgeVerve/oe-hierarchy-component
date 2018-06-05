@@ -36,15 +36,15 @@ CSS Variable | Description | Default
             }
 
             oe-hierarchy-node {
-                --path-color: var(--oe-connector-color,#0288d1);
-                --connector-thickness:var(--oe-connector-thickness,4px);
-                --connector-selected-color:var(--oe-connector-selected,red);
+                --path-color: var(--oe-connector-color, #0288d1);
+                --connector-thickness: var(--oe-connector-thickness, 4px);
+                --connector-selected-color: var(--oe-connector-selected, red);
             }
         </style>
         <div class="component-container">
             <template is="dom-if" if={{data}}>
-            <oe-hierarchy-node data={{data}} children-key=[[childrenKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]]
-                unique-key=[[uniqueKey]] node-data-as=[[nodeDataAs]] is-parent-node></oe-hierarchy-node>
+                <oe-hierarchy-node data={{data}} children-key=[[childrenKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]] unique-key=[[uniqueKey]]
+                    node-data-as=[[nodeDataAs]] is-parent-node></oe-hierarchy-node>
             </template>
         </div>
     </template>
@@ -56,7 +56,7 @@ CSS Variable | Description | Default
              *
              * @event pre-connector-selected
              */
-            
+
             /**
              * Fired when connector after a node is selected.
              *
@@ -126,7 +126,7 @@ CSS Variable | Description | Default
                  */
                 nodeDataAs: {
                     type: String,
-                    value:"data"
+                    value: "data"
                 }
             },
             behaviors: [Polymer.Templatizer],
@@ -157,7 +157,8 @@ CSS Variable | Description | Default
                         curSelected.classList.add('selected');
                         var selected = {
                             key: key,
-                            data: event.detail.data,
+                            data: event.detail.node.data,
+                            node: event.detail.node,
                             type: curSelected.id
                         }
                         this.set('selectedData', selected);
@@ -176,7 +177,10 @@ CSS Variable | Description | Default
                             default:
                                 eventName = "selection-changed";
                         }
-                        this.fire(eventName, this.selectedData.data);
+                        this.fire(eventName, {
+                            node: this.selectedData.data,
+                            parent: this.selectedData.node.parentData
+                        });
                     }
                 }
                 this.listen(document, 'keydown', '_keyDownListener');
@@ -198,7 +202,10 @@ CSS Variable | Description | Default
                         default:
                             eventName = "delete-key-pressed";
                     }
-                    this.fire(eventName, this.selectedData.data);
+                    this.fire(eventName, {
+                        node: this.selectedData.data,
+                        parent: this.selectedData.node.parentData
+                    });
                 }
             },
             _resetSelected: function (event) {

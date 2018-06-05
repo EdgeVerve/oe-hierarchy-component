@@ -26,11 +26,22 @@
         <demo-snippet>
             <template>
                 <template is="dom-bind" id="hierarchy">
-                    <oe-hierarchy-component id="hierarchy-component" data={{data}}  node-actions="[[nodeActions]]">
+                    <oe-hierarchy-component id="hierarchy-component" data={{data}} node-actions="[[nodeActions]]">
                     </oe-hierarchy-component>
+                    <div hidden=[[!showEvent]]>
+                        <label>Event Name : [[eventName]]</label>
+                        <hr>
+                        <label>Event Detail</label>
+                        <pre>
+[[eventData]]
+                    </pre>
+                    </div>
                 </template>
                 <script>
                     var target = document.getElementById('hierarchy');
+                    target.set('showEvent', false);
+
+
                     var data = {
                         label: "MTN Holdings",
                         children: [{
@@ -39,7 +50,7 @@
                                     label: "MTN Marutis",
                                     children: [{
                                         label: "MTN Telecom",
-                                       children: [{
+                                        children: [{
                                                 label: "MTN Nigeria"
                                             },
                                             {
@@ -72,17 +83,32 @@
                             ]
                         }]
                     }
-                    var actions=[{
-                        icon:"add",
-                        event:"add-node",
-                        label:"Add new node"
-                    },{
-                        icon:"create",
-                        event:"edit-node",
-                        label:"Edit node"
+                    var actions = [{
+                        icon: "add",
+                        event: "add-node",
+                        label: "Add new node"
+                    }, {
+                        icon: "create",
+                        event: "edit-node",
+                        label: "Edit node"
                     }]
-                    target.set('data',data);
-                    target.set('nodeActions',actions);
+                    target.set('data', data);
+                    target.set('nodeActions', actions);
+                    Polymer.Base.async(function () {
+                        var component = document.getElementById('hierarchy-component');
+
+                        function eventSetter(event) {
+                            target.set('showEvent', true);
+                            target.set('eventName', event.type);
+                            target.set('eventData', JSON.stringify(event.detail, null, 2));
+                        }
+                        var eventList = ['node-selected', 'pre-connector-selected', 'post-connector-selected',
+                            'remove-node', 'unlink-child-node', 'unlink-all-child-node', 'deselect-item'
+                        ];
+                        eventList.forEach(function (evName) {
+                            component.addEventListener(evName, eventSetter);
+                        })
+                    }, 300);
                 </script>
             </template>
         </demo-snippet>
@@ -90,13 +116,13 @@
         <demo-snippet>
             <template>
                 <template is="dom-bind" id="hierarchy-custom">
-                    <style is="custom-style"> 
-                        #hierarchy-custom-component{
-                            --oe-connector-color:red;
-                            --oe-connector-thickness:2px;
-                            --oe-connector-selected:green;
-                            --oe-node-item:{
-                                border-radius:4px;
+                    <style is="custom-style">
+                        #hierarchy-custom-component {
+                            --oe-connector-color: red;
+                            --oe-connector-thickness: 2px;
+                            --oe-connector-selected: green;
+                            --oe-node-item: {
+                                border-radius: 4px;
                             }
                         }
                     </style>
@@ -171,7 +197,7 @@
                             ]
                         }]
                     }
-                    target2.set('data',data2);
+                    target2.set('data', data2);
                 </script>
             </template>
         </demo-snippet>
