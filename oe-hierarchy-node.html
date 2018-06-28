@@ -161,7 +161,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <div class="node-children-container layout vertical">
                 <div id="connector" class="connector-lines"></div>
                 <div id="collapse" hidden=[[!showChildren]]>
-                    <template is="dom-repeat" items="[[data.children]]">
+                    <template is="dom-repeat" items="[[_getChildren(data,childrenKey)]]">
                         <oe-hierarchy-node children-key=[[childrenKey]] node-template=[[nodeTemplate]] 
                             node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]] parent-data=[[data]]
                             actions=[[actions]] path=[[_getPath(index)]] class="child-nodes" data={{item}}></oe-hierarchy-node>
@@ -329,6 +329,9 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 if (!isSelectable) {
                     this.fire('reset-selected')
                 }
+            },
+            _getChildren:function(data,childrenKey){
+                return data[childrenKey];
             }
         })
     </script>
