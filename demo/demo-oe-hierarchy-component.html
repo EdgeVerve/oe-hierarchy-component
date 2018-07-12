@@ -26,7 +26,7 @@
         <demo-snippet>
             <template>
                 <template is="dom-bind" id="hierarchy">
-                    <oe-hierarchy-component id="hierarchy-component" data={{data}} node-actions="[[nodeActions]]">
+                    <oe-hierarchy-component id="hierarchy-component" data={{data}} node-actions="[[nodeActions]]" label-key="name" relation-key="rname">
                     </oe-hierarchy-component>
                     <div hidden=[[!showEvent]]>
                         <label>Event Name : [[eventName]]</label>
@@ -43,42 +43,54 @@
 
 
                     var data = {
-                        label: "MTN Holdings",
+                        name: "MTN Holdings",
                         children: [{
-                            label: "MTN Intl",
+                            name: "MTN Intl",
+                            rname: "relation one",
                             children: [{
-                                    label: "MTN Marutis",
+                                    name: "MTN Marutis",
+                                    rname: "rel two",
                                     children: [{
-                                        label: "MTN Telecom",
+                                        name: "MTN Telecom",
+                                        rname: "relation three",
                                         children: [{
-                                                label: "MTN Nigeria"
+                                                name: "MTN Nigeria",
+                                                rname: "rel four"
                                             },
                                             {
-                                                label: "MTN Uganda"
+                                                name: "MTN Uganda",
+                                                rname: "rel4",
                                             }
                                         ]
                                     }]
                                 },
                                 {
-                                    label: "Investcom llc"
+                                    name: "Investcom llc",
+                                    rname: "rel2"
                                 },
                                 {
-                                    label: "MTN Dubai",
+                                    name: "MTN Dubai",
+                                    rname: "rel2",
                                     children: [{
-                                            label: "MTN Telecom (Dubai)",
+                                            name: "MTN Telecom (Dubai)",
+                                            rname: "rel3",
                                             children: [{
-                                                label: "MTN Ghana"
+                                                name: "MTN Ghana",
+                                                rname: "rel4"
                                             }, {
-                                                label: "MTN Sudan"
+                                                name: "MTN Sudan",
+                                                rname: "rel4"
                                             }]
                                         },
                                         {
-                                            label: "Mednet"
+                                            name: "Mednet",
+                                    rname: "rel3"
                                         }
                                     ]
                                 },
                                 {
-                                    label: "MTN Swaziland"
+                                    name: "MTN Swaziland",
+                                    rname: "rel2"
                                 }
                             ]
                         }]

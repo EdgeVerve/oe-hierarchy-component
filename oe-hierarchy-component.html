@@ -1,4 +1,4 @@
-<!-- 
+<!--
   ©2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
   Bangalore, India. All Rights Reserved.
 -->
@@ -43,7 +43,7 @@ CSS Variable | Description | Default
         </style>
         <div class="component-container">
             <template is="dom-if" if={{data}}>
-                <oe-hierarchy-node data={{data}} children-key=[[childrenKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]] unique-key=[[uniqueKey]]
+                <oe-hierarchy-node data={{data}} label-key=[[labelKey]] children-key=[[childrenKey]] relation-key=[[relationKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]] unique-key=[[uniqueKey]]
                     node-data-as=[[nodeDataAs]] is-parent-node></oe-hierarchy-node>
             </template>
         </div>
@@ -106,11 +106,25 @@ CSS Variable | Description | Default
                     }
                 },
                 /**
+                 * The property name containing the label in nodes.
+                 */
+                labelKey: {
+                    type: String,
+                    value: "label"
+                },
+                /**
                  * The property name of array containing the next level nodes.
                  */
                 childrenKey: {
                     type: String,
                     value: "children"
+                },
+                /**
+                 * The property name containing the relation name in nodes.
+                 */
+                relationKey: {
+                    type: String,
+                    value: "relationType"
                 },
                 /**
                  * The list of actions that are available in the node in addition to add/edit.

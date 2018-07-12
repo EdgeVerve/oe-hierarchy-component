@@ -21,6 +21,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 box-sizing: border-box;
                 --animation-time: 0ms;
                 --connector-thickness: 4px;
+                --pre-connector-width: 32px;
+                --pre-connector-relation-bg: #ffffff;
             }
 
             .node-detail-container {
@@ -47,7 +49,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             }
 
             .node-children-container {
-                margin-left: 64px;
+                margin-left: calc(32px + var(--pre-connector-width));
                 position: relative;
             }
 
@@ -59,10 +61,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             }
 
             .node-detail-container #pre-connector {
-                width: 32px;
+                width: var(--pre-connector-width);
                 height: var(--connector-thickness);
-                left: -32px;
+                left: -var(--pre-connector-width);
                 cursor: pointer;
+            }
+
+            .node-detail-container #pre-connector label {
+                padding: 0px 2px;
+                background-color: var(--pre-connector-relation-bg);
             }
 
             .node-detail-container #post-connector {
@@ -85,7 +92,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             #connector {
                 width: var(--connector-thickness);
                 height: 0px;
-                left: -33px;
+                left: -var(--pre-connector-width);
                 top: calc(var(--connector-thickness) + 72px);
                 transition: height var(--animation-time);
             }
@@ -149,10 +156,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                             </paper-menu>
                         </paper-menu-button>
                     </div>
-                    <div id="pre-connector" key$="pre-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable" hidden=[[isParentNode]]></div>
+                    <div id="pre-connector" key$="pre-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable layout horizontal center-center" hidden=[[isParentNode]]><label>[[_getValue(data, relationKey)]]</label></div>
                     <div class="node-detail selectable" key$="node-[[uniqueId]]" id="node-detail" on-tap="_selectElement">
                         <div class="node-default-display" on-dblclick="_toggleChildren">
-                                <label>[[data.label]]</label>
+                                <label>[[_getValue(data, labelKey)]]</label>
                         </div>
                     </div>
                     <div id="post-connector" key$="post-[[uniqueId]]" on-tap="_selectElement" class="connector-lines  selectable" hidden=[[!_showPostConnector(showChildren,data.*)]]></div>
@@ -161,8 +168,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             <div class="node-children-container layout vertical">
                 <div id="connector" class="connector-lines"></div>
                 <div id="collapse" hidden=[[!showChildren]]>
-                    <template is="dom-repeat" items="[[_getChildren(data,childrenKey)]]">
-                        <oe-hierarchy-node children-key=[[childrenKey]] node-template=[[nodeTemplate]] 
+                    <template is="dom-repeat" items="[[_getValue(data,childrenKey)]]">
+                        <oe-hierarchy-node label-key=[[labelKey]] children-key=[[childrenKey]] relation-key=[[relationKey]] node-template=[[nodeTemplate]]
                             node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]] parent-data=[[data]]
                             actions=[[actions]] path=[[_getPath(index)]] class="child-nodes" data={{item}}></oe-hierarchy-node>
                     </template>
@@ -176,7 +183,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             behaviors: [],
             properties: {
                 data: {
-                    type: Object
+                    type: Object,
+                    observer: '_dataChanged'
                 },
                 parentData:{
                     type:Object,
@@ -209,9 +217,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                         return []
                     }
                 },
+                labelKey: {
+                    type: String,
+                    value: "label"
+                },
                 childrenKey: {
                     type: String,
                     value: "children"
+                },
+                relationKey: {
+                    type: String,
+                    value: "relationType"
                 },
                 nodeTemplate: {
                     type: Object
@@ -240,6 +256,23 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             },
             _nextLevel: function (level) {
                 return level + 1;
+            },
+            _dataChanged: function(newData) {
+                var self = this;
+                if (newData && newData[this.childrenKey]) {
+                    var childrenNodes = newData[this.childrenKey];
+                    var relationLengths = [];
+                    childrenNodes && childrenNodes.forEach(element => {
+                        if (element[this.relationKey]) {
+                            relationLengths.push(element[this.relationKey].length);
+                        }
+                    });
+                    if (relationLengths.length > 0) {
+                        var preConnectorLength = Math.max(...relationLengths) * 5 + 36 + 'px';
+                        self.customStyle['--pre-connector-width'] = preConnectorLength;
+                        self.updateStyles();
+                    }
+                }
             },
             _renderNodeTemplate: function (data,nodeTemplate) {
                 var template = this.nodeTemplate;
@@ -330,8 +363,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     this.fire('reset-selected')
                 }
             },
-            _getChildren:function(data,childrenKey){
-                return data[childrenKey];
+            _getValue: function(data, key) {
+                return data[key];
             }
         })
     </script>

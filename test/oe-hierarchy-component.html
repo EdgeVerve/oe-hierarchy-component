@@ -1,4 +1,4 @@
-<!-- 
+<!--
   ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
   Bangalore, India. All Rights Reserved.
 -->
@@ -194,24 +194,24 @@
           hierarchyComponent.set('data', data);
           flush(function(){
             var node = hierarchyComponent.querySelectorAll('oe-hierarchy-node')[3];
-            
+
             function selectNodeHandler(eve){
-              expect(eve.detail).to.be.equal(node.data);
+              expect(eve.detail.node).to.be.equal(node.data);
               hierarchyComponent.removeEventListener('node-selected',selectNodeHandler);
-              
+
               hierarchyComponent.addEventListener('pre-connector-selected',selectPreHandler);
               hierarchyComponent.addEventListener('post-connector-selected',selectPostHandler);
               var preSelector = node.querySelector('#pre-connector');
               preSelector.click();
             }
             function selectPreHandler(eve){
-              expect(eve.detail).to.be.equal(node.data);
+              expect(eve.detail.node).to.be.equal(node.data);
               hierarchyComponent.removeEventListener('pre-connector-selected',selectPreHandler);
               var postSelector = node.querySelector('#post-connector');
               postSelector.click();
             }
             function selectPostHandler(eve){
-              expect(eve.detail).to.be.equal(node.data);
+              expect(eve.detail.node).to.be.equal(node.data);
               hierarchyComponent.removeEventListener('post-connector-selected',selectPostHandler);
               done();
             }
@@ -233,13 +233,13 @@
 
           flush(function(){
             var node = hierarchyComponent.querySelectorAll('oe-hierarchy-node')[5];
-            
-            
+
+
 
             function deleteNodeHandler(eve){
-              expect(eve.detail).to.be.equal(node.data);
+              expect(eve.detail.node).to.be.equal(node.data);
               hierarchyComponent.removeEventListener('remove-node',deleteNodeHandler);
-              
+
               hierarchyComponent.addEventListener('unlink-child-node',deletePreHandler);
               hierarchyComponent.addEventListener('unlink-all-child-node',deletePostHandler);
               var preSelector = node.querySelector('#pre-connector');
@@ -249,7 +249,7 @@
               })
             }
             function deletePreHandler(eve){
-              expect(eve.detail).to.be.equal(node.data);
+              expect(eve.detail.node).to.be.equal(node.data);
               hierarchyComponent.removeEventListener('unlink-child-node',deletePreHandler);
               var postSelector = node.querySelector('#post-connector');
               postSelector.click();
@@ -258,7 +258,7 @@
               });
             }
             function deletePostHandler(eve){
-              expect(eve.detail).to.be.equal(node.data);
+              expect(eve.detail.node).to.be.equal(node.data);
               hierarchyComponent.removeEventListener('unlink-all-child-node',deletePostHandler);
               done();
             }
