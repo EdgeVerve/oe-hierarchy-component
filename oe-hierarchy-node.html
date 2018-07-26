@@ -21,7 +21,6 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 box-sizing: border-box;
                 --animation-time: 0ms;
                 --connector-thickness: 4px;
-                --pre-connector-width: 32px;
                 --pre-connector-relation-bg: #ffffff;
             }
 
@@ -183,8 +182,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             behaviors: [],
             properties: {
                 data: {
-                    type: Object,
-                    observer: '_dataChanged'
+                    type: Object
                 },
                 parentData:{
                     type:Object,
@@ -239,7 +237,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 'toggle-children':'_toggleChildren',
                 'select-node':'_selectNode'
             },
-            observers: ['_renderNodeTemplate(data,nodeTemplate)','_drawConnector(showChildren)'],
+            observers: ['_renderNodeTemplate(data,nodeTemplate)','_drawConnector(showChildren)','_computeConnector(_attached, data.*)'],
             behaviors: [
                 Polymer.Templatizer
             ],
@@ -252,14 +250,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 this.set('uniqueId', uniqValue);
                 this.async(function () {
                     this.fire('redraw-connector');
+                    this.set('_attached',true);
                 }, 100);
+
             },
             _nextLevel: function (level) {
                 return level + 1;
             },
-            _dataChanged: function(newData) {
+            _computeConnector: function(_attached, change) {
                 var self = this;
-                if (newData && newData[this.childrenKey]) {
+                var newData = this.data;
+                if (_attached && newData && newData[this.childrenKey]) {
                     var childrenNodes = newData[this.childrenKey];
                     var relationLengths = [];
                     childrenNodes && childrenNodes.forEach(element => {
@@ -268,9 +269,8 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                         }
                     });
                     if (relationLengths.length > 0) {
-                        var preConnectorLength = Math.max(...relationLengths) * 5 + 36 + 'px';
-                        self.customStyle['--pre-connector-width'] = preConnectorLength;
-                        self.updateStyles();
+                        var preConnectorLength = Math.max(...relationLengths) * 7 + 36;
+                        this.fire('update-pre-connector-width', {width: preConnectorLength});
                     }
                 }
             },

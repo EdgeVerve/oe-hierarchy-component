@@ -39,6 +39,7 @@ CSS Variable | Description | Default
                 --path-color: var(--oe-connector-color, #0288d1);
                 --connector-thickness: var(--oe-connector-thickness, 4px);
                 --connector-selected-color: var(--oe-connector-selected, red);
+                --pre-connector-width: var(--connector-width, 32px);
             }
         </style>
         <div class="component-container">
@@ -141,12 +142,17 @@ CSS Variable | Description | Default
                 nodeDataAs: {
                     type: String,
                     value: "data"
+                },
+                preConnectorWidth: {
+                    type: Number,
+                    value: 0
                 }
             },
             behaviors: [Polymer.Templatizer],
             listeners: {
                 'node-item-selected': '_nodeItemSelected',
-                'reset-selected': '_resetSelected'
+                'reset-selected': '_resetSelected',
+                'update-pre-connector-width': '_updatePreConnectorWidth'
             },
             ready: function () {
                 if (!this.ctor) {
@@ -230,6 +236,13 @@ CSS Variable | Description | Default
                 this.set('selectedData', {});
                 this.fire('deselect-item');
                 this.unlisten(document, 'keydown', '_keyDownListener');
+            },
+            _updatePreConnectorWidth: function(event) {
+                if (this.preConnectorWidth < event.detail.width) {
+                    this.set('preConnectorWidth', event.detail.width);
+                    this.customStyle['--connector-width'] = this.preConnectorWidth + 'px';
+                    this.updateStyles();
+                }
             }
         })
     </script>

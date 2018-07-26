@@ -55,7 +55,7 @@
                                         rname: "relation three",
                                         children: [{
                                                 name: "MTN Nigeria",
-                                                rname: "rel four"
+                                                rname: "relation four with big name"
                                             },
                                             {
                                                 name: "MTN Uganda",
@@ -138,7 +138,7 @@
                             }
                         }
                     </style>
-                    <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item">
+                    <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item" relation-key="">
                         <template>
                             <custom-node data="{{item}}" show-children="[[showChildren]]"></custom-node>
                         </template>
@@ -150,21 +150,26 @@
                         name: "MTN Holdings",
                         children: [{
                             name: "MTN Intl",
+                            relationType: "rel one",
                             children: [{
                                     name: "MTN Marutis",
+                                    relationType: "rel two",
                                     id: "GPIF003",
                                     type: "GPIF",
                                     children: [{
                                         name: "MTN Telecom",
+                                        relationType: "rel three",
                                         id: "GCIF001",
                                         type: "GCIF",
                                         children: [{
                                                 name: "MTN Nigeria",
+                                                relationType: "rel four",
                                                 id: "ECIF005",
                                                 type: "ECIF"
                                             },
                                             {
                                                 name: "MTN Uganda",
+                                                relationType: "rel five",
                                                 id: "ECIF006",
                                                 type: "ECIF"
                                             }
@@ -173,29 +178,35 @@
                                 },
                                 {
                                     name: "Investcom llc",
+                                    relationType: "rel six",
                                     id: "GPIF004",
                                     type: "GPIF"
                                 },
                                 {
                                     name: "MTN Dubai",
+                                    relationType: "rel seven",
                                     id: "GPIF005",
                                     type: "GPIF",
                                     children: [{
                                             name: "MTN Telecom (Dubai)",
+                                            relationType: "rel eight",
                                             id: "GCIF002",
                                             type: "GCIF",
                                             children: [{
                                                 name: "MTN Ghana",
+                                                relationType: "rel nine",
                                                 id: "ECIF007",
                                                 type: "ECIF"
                                             }, {
                                                 name: "MTN Sudan",
+                                                relationType: "rel ten",
                                                 id: "ECIF008",
                                                 type: "ECIF"
                                             }]
                                         },
                                         {
                                             name: "Mednet",
+                                            relationType: "rel eleven",
                                             id: "ECIF004",
                                             type: "ECIF"
                                         }
@@ -203,6 +214,7 @@
                                 },
                                 {
                                     name: "MTN Swaziland",
+                                    relationType: "rel twelve",
                                     id: "ECIF003",
                                     type: "ECIF"
                                 }
