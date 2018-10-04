@@ -24,6 +24,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 --pre-connector-relation-bg: #ffffff;
             }
 
+            :host[is-parent] > .component-container {
+                justify-content: flex-end;
+            }
+
             .node-detail-container {
                 position: relative;
             }
@@ -37,7 +41,7 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 @apply(--oe-node-item);
             }
 
-            .node-default-display{
+            .node-default-display {
                 height: 70px;
                 width: 130px;
                 box-sizing: border-box;
@@ -50,6 +54,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             .node-children-container {
                 margin-left: calc(32px + var(--pre-connector-width));
                 position: relative;
+            }
+
+            .node-parent-container {
+                position: relative;
+            }
+
+            .parent-nodes {
+                float: right;
             }
 
             .connector-lines {
@@ -80,10 +92,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
 
             .node-detail-container #pre-connector.selected,
             .node-detail-container #post-connector.selected {
-                background: var(--connector-selected-color,--accent-color);
+                background: var(--connector-selected-color, --accent-color);
             }
 
-            .node-detail.selected{
+            .node-detail.selected {
                 box-shadow: 3px 3px 1px 1px rgba(0, 0, 0, 0.5);
                 @apply(--oe-node-selected);
             }
@@ -96,11 +108,19 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 transition: height var(--animation-time);
             }
 
+            #parentconnector {
+                width: var(--connector-thickness);
+                height: 0px;
+                right: var(--pre-connector-width);
+                top: calc(var(--connector-thickness) + 72px);
+                transition: height var(--animation-time);
+            }
+
             .action-panel {
                 position: absolute;
                 z-index: 2;
                 height: 28px;
-                right:0px;
+                right: 0px;
                 top: -28px;
                 background: rgba(0, 0, 0, 0.7);
                 color: #FFF;
@@ -127,19 +147,29 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 opacity: 1;
             }
 
-            .node-action-item{
+            .node-action-item {
                 font-size: 12px;
                 min-height: 32px;
                 padding: 0 8px;
             }
 
-            .node-action-item iron-icon{
-                --iron-icon-width:16px;
-                --iron-icon-height:16px;
+            .node-action-item iron-icon {
+                --iron-icon-width: 16px;
+                --iron-icon-height: 16px;
                 margin-right: 8px;
             }
         </style>
         <div class="component-container layout horizontal">
+            <div class="node-parent-container" hidden=[[!showParent]]>
+                <div id="parentconnector" class="connector-lines"></div>
+                <div id="parentcollapse" class="layout vertical">
+                    <template is="dom-repeat" items="[[_getConditionalValue(data,parentKey,isChild,isParentNode)]]">
+                        <oe-hierarchy-node label-key=[[labelKey]] is-parent parent-key=[[parentKey]] relation-key=[[relationKey]] node-template=[[nodeTemplate]]
+                            node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]] parent-data=[[data]] actions=[[actions]]
+                            path=[[_getPath(index)]] class="parent-nodes" data={{item}}></oe-hierarchy-node>
+                    </template>
+                </div>
+            </div>
             <div class="current-node-detail">
                 <div class="node-detail-container">
                     <div class="action-panel layout horizontal around-justified center" hidden=[[!actions.length]]>
@@ -155,22 +185,28 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                             </paper-menu>
                         </paper-menu-button>
                     </div>
-                    <div id="pre-connector" key$="pre-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable layout horizontal center-center" hidden=[[isParentNode]]><label>[[_getValue(data, relationKey)]]</label></div>
+                    <div id="pre-connector" key$="pre-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable layout horizontal center-center"
+                        hidden="[[!__showConnector(showParent,'pre',isChild,data.*,parentKey)]]">
+                        <label>[[_getConditionalValue(data, relationKey, isParent,isParentNode)]]</label>
+                    </div>
                     <div class="node-detail selectable" key$="node-[[uniqueId]]" id="node-detail" on-tap="_selectElement">
-                        <div class="node-default-display" on-dblclick="_toggleChildren">
-                                <label>[[_getValue(data, labelKey)]]</label>
+                        <div class="node-default-display" on-dblclick="_toggleSubTree">
+                            <label>[[_getConditionalValue(data, labelKey)]]</label>
                         </div>
                     </div>
-                    <div id="post-connector" key$="post-[[uniqueId]]" on-tap="_selectElement" class="connector-lines  selectable" hidden=[[!_showPostConnector(showChildren,data.*)]]></div>
+                    <div id="post-connector" key$="post-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable layout horizontal center-center"
+                        hidden="[[!__showConnector(showChildren,'post',isParent,data.*,childrenKey)]]">
+                        <label>[[_getConditionalValue(data, relationKey, isChild,isParentNode)]]</label>
+                    </div>
                 </div>
             </div>
-            <div class="node-children-container layout vertical">
+            <div class="node-children-container" hidden=[[!showChildren]]>
                 <div id="connector" class="connector-lines"></div>
-                <div id="collapse" hidden=[[!showChildren]]>
-                    <template is="dom-repeat" items="[[_getValue(data,childrenKey)]]">
+                <div id="collapse" class="layout vertical">
+                    <template is="dom-repeat" items="[[_getConditionalValue(data,childrenKey,isParent,isParentNode)]]">
                         <oe-hierarchy-node label-key=[[labelKey]] children-key=[[childrenKey]] relation-key=[[relationKey]] node-template=[[nodeTemplate]]
-                            node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]] parent-data=[[data]]
-                            actions=[[actions]] path=[[_getPath(index)]] class="child-nodes" data={{item}}></oe-hierarchy-node>
+                            node-data-as=[[nodeDataAs]] level=[[_nextLevel(level)]] parent-data=[[data]] actions=[[actions]] is-child
+                            path=[[_getPath(index)]] class="child-nodes" data={{item}}></oe-hierarchy-node>
                     </template>
                 </div>
             </div>
@@ -182,13 +218,24 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
             behaviors: [],
             properties: {
                 data: {
-                    type: Object
+                    type: Object,
+                    value:function(){
+                        return {}
+                    }
                 },
-                parentData:{
-                    type:Object,
-                    value:null
+                parentData: {
+                    type: Object,
+                    value: null
                 },
                 isParentNode: {
+                    type: Boolean,
+                    value: false
+                },
+                isParent: {
+                    type: Boolean,
+                    value: false
+                },
+                isChild: {
                     type: Boolean,
                     value: false
                 },
@@ -196,13 +243,17 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     type: Number,
                     reflectToAttribute: true
                 },
+                showParent: {
+                    type: Boolean,
+                    value: true
+                },
                 showChildren: {
                     type: Boolean,
                     value: true
                 },
                 actions: {
                     type: Array,
-                    value:function(){
+                    value: function () {
                         return [];
                     }
                 },
@@ -223,6 +274,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     type: String,
                     value: "children"
                 },
+                parentKey: {
+                    type: String,
+                    value: "parent"
+                },
                 relationKey: {
                     type: String,
                     value: "relationType"
@@ -232,12 +287,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 }
             },
             listeners: {
-                'redraw-connector': '_drawConnector',
+                'redraw-connector':'_drawConnector',
                 'tap': '_handleTap',
-                'toggle-children':'_toggleChildren',
-                'select-node':'_selectNode'
+                'toggle-sub-tree': '_toggleSubTree',
+                'toggle-parent': '_toggleParent',
+                'toggle-children': '_toggleChildren',
+                'select-node': '_selectNode'
             },
-            observers: ['_renderNodeTemplate(data,nodeTemplate)','_drawConnector(showChildren)','_computeConnector(_attached, data.*)'],
+            observers: ['_renderNodeTemplate(data,nodeTemplate)', '_drawConnector(showChildren,showParent)', '_computeConnector(_attached, data.*)'],
             behaviors: [
                 Polymer.Templatizer
             ],
@@ -250,14 +307,14 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 this.set('uniqueId', uniqValue);
                 this.async(function () {
                     this.fire('redraw-connector');
-                    this.set('_attached',true);
+                    this.set('_attached', true);
                 }, 100);
 
             },
             _nextLevel: function (level) {
                 return level + 1;
             },
-            _computeConnector: function(_attached, change) {
+            _computeConnector: function (_attached, change) {
                 var self = this;
                 var newData = this.data;
                 if (_attached && newData && newData[this.childrenKey]) {
@@ -270,11 +327,11 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     });
                     if (relationLengths.length > 0) {
                         var preConnectorLength = Math.max(...relationLengths) * 7 + 36;
-                        this.fire('update-pre-connector-width', {width: preConnectorLength});
+                        this.fire('update-pre-connector-width', { width: preConnectorLength });
                     }
                 }
             },
-            _renderNodeTemplate: function (data,nodeTemplate) {
+            _renderNodeTemplate: function (data, nodeTemplate) {
                 var template = this.nodeTemplate;
                 if (template) {
                     this.templatize(template);
@@ -292,43 +349,91 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                 curPath.push(index);
                 return curPath;
             },
-            _drawConnector: function () {
-                if (this.showChildren) {
-                    var curTagName = this.tagName;
-                    var currentChildren = [].filter.call(this.$.collapse.children, function (node) {
-                        return (node.tagName && node.tagName === curTagName);
-                    });
-                    if (currentChildren.length === 0) {
-                        return;
-                    }
-                    var firstChild = currentChildren[0];
-                    var lastChild = currentChildren[currentChildren.length - 1];
-                    var height = lastChild.getBoundingClientRect().top - firstChild.getBoundingClientRect()
-                        .top;
-                    this.$.connector.style.height = height + "px";
-                } else {
-                    this.$.connector.style.height = "0px";
+
+
+            _drawConnector:function(){
+                if(this.isParentNode){
+                    //draw both
+                    this.__drawConnector(this.$.collapse,this.$.connector,this.showChildren);
+                    this.__drawConnector(this.$.parentcollapse,this.$.parentconnector,this.showParent);
+                }else if(this.isParent){
+                    this.__drawConnector(this.$.parentcollapse,this.$.parentconnector,this.showParent);
+                }else{
+                    this.__drawConnector(this.$.collapse,this.$.connector,this.showChildren);
                 }
             },
-            _toggleChildren: function (event) {
+            __drawConnector:function(targetContainer,connector,showSubTree){
+                if(!showSubTree){
+                    connector.style.height = "0px";
+                    return;
+                }
+                var curTagName = this.tagName;
+                var currentChildren = [].filter.call(targetContainer.children, function (node) {
+                    return (node.tagName && node.tagName === curTagName);
+                });
+                if (currentChildren.length === 0) {
+                    return;
+                }
+                var firstChild = currentChildren[0];
+                var lastChild = currentChildren[currentChildren.length - 1];
+                height = lastChild.getBoundingClientRect().top - firstChild.getBoundingClientRect().top;
+                connector.style.height = height + "px";
+            },
+
+
+
+            _toggleSubTree: function (event) {
                 event.stopPropagation();
                 event.stopImmediatePropagation();
+
+                if (this.isParentNode) {
+                    this._toggleParent();
+                    this._toggleChildren();
+                } else if (this.isParent) {
+                    this._toggleParent();
+                } else {
+                    this._toggleChildren();
+                }
+
+                this.async(function () {
+                    this.fire('redraw-connector');
+                }, 0);
+            },
+            _toggleChildren: function (event) {
                 if (this.showChildren) {
                     this.set('showChildren', false);
-                } else if (this.data && this._hasChildren()) {
+                } else if (this.data && this._hasChildren) {
                     this.set('showChildren', true);
                 }
-                this.async(function(){
-                    this.fire('redraw-connector');
-                },0);
             },
-            _showPostConnector: function (showChildren, path) {
-                return this.showChildren && this._hasChildren();
+            _toggleParent: function (event) {
+                if (this.showParent) {
+                    this.set('showParent', false);
+                } else if (this.data && this._hasParent) {
+                    this.set('showParent', true);
+                }
             },
-            _hasChildren: function () {
+
+
+            __showConnector(showArrFlag,name,forceFlag,deltaChange){
+                if(forceFlag){
+                    return true
+                }else{
+                    return showArrFlag && ((name == "pre")?this._hasParent:this._hasChildren);
+                }
+            },
+
+
+            get _hasParent() {
+                var parent = this.data[this.parentKey];
+                return !!(parent && parent.length > 0);
+            },
+            get _hasChildren() {
                 var children = this.data[this.childrenKey];
-                return (children && children.length > 0);
+                return !!(children && children.length > 0);
             },
+
+
             _fireEvent: function (event) {
                 var target = event.currentTarget;
                 var eventName = target.getAttribute('event-name');
@@ -340,10 +445,10 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     });
                 }
             },
-            _selectNode:function(event){
+            _selectNode: function (event) {
                 event.stopPropagation();
                 this.fire('node-item-selected', {
-                    key: ("node-"+this.uniqueId),
+                    key: ("node-" + this.uniqueId),
                     node: this
                 });
             },
@@ -363,8 +468,15 @@ Any unauthorized reproduction, storage, transmission in any form or by any means
                     this.fire('reset-selected')
                 }
             },
-            _getValue: function(data, key) {
-                return data[key];
+
+
+
+            _getConditionalValue:function(data,key,ignoreFlag,forceFlag){
+               if(ignoreFlag && !forceFlag){
+                   return;
+               }else{
+                   return data[key];
+               }
             }
         })
     </script>
