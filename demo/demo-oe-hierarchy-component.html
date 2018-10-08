@@ -44,54 +44,89 @@
 
                     var data = {
                         name: "MTN Holdings",
+                        parent: [{
+                            name: "One",
+                            rname: "one",
+                            parent: [{
+                                name: "Three",
+                                rname: "three",
+                                parent: [{
+                                    name: "Seven",
+                                    rname: "Seven"
+                                }, {
+                                    name: "Eight",
+                                    rname: "Eight"
+                                }]
+                            }, {
+                                name: "Four",
+                                rname: "four"
+                            }]
+                        }, {
+                            name: "Two",
+                            rname: "two",
+                            parent: [{
+                                name: "Five",
+                                rname: "five"
+                            }, {
+                                name: "Six",
+                                rname: "six"
+                            }]
+                        }],
                         children: [{
                             name: "MTN Intl",
                             rname: "relation one",
+                            parent: [{
+                                name: "Five",
+                                rname: "five"
+                            }, {
+                                name: "Six",
+                                rname: "six"
+                            }],
                             children: [{
-                                    name: "MTN Marutis",
-                                    rname: "rel two",
+                                name: "MTN Marutis",
+                                rname: "rel two",
+                                children: [{
+                                    name: "MTN Telecom",
+                                    rname: "relation three",
                                     children: [{
-                                        name: "MTN Telecom",
-                                        rname: "relation three",
-                                        children: [{
-                                                name: "MTN Nigeria",
-                                                rname: "relation four with big name"
-                                            },
-                                            {
-                                                name: "MTN Uganda",
-                                                rname: "rel4",
-                                            }
-                                        ]
+                                        name: "MTN Nigeria",
+                                        rname: "relation four with big name"
+                                    },
+                                    {
+                                        name: "MTN Uganda",
+                                        rname: "rel4",
+                                    }
+                                    ]
+                                }]
+                            },
+                            {
+                                name: "Investcom llc",
+                                rname: "rel2"
+                            },
+                            {
+                                name: "MTN Dubai",
+                                rname: "rel2",
+                                children: [{
+                                    name: "MTN Telecom (Dubai)",
+                                    rname: "rel3",
+                                    children: [{
+                                        name: "MTN Ghana",
+                                        rname: "rel4"
+                                    }, {
+                                        name: "MTN Sudan",
+                                        rname: "rel4"
                                     }]
                                 },
                                 {
-                                    name: "Investcom llc",
-                                    rname: "rel2"
-                                },
-                                {
-                                    name: "MTN Dubai",
-                                    rname: "rel2",
-                                    children: [{
-                                            name: "MTN Telecom (Dubai)",
-                                            rname: "rel3",
-                                            children: [{
-                                                name: "MTN Ghana",
-                                                rname: "rel4"
-                                            }, {
-                                                name: "MTN Sudan",
-                                                rname: "rel4"
-                                            }]
-                                        },
-                                        {
-                                            name: "Mednet",
+                                    name: "Mednet",
                                     rname: "rel3"
-                                        }
-                                    ]
-                                },
-                                {
-                                    name: "MTN Swaziland",
-                                    rname: "rel2"
                                 }
+                                ]
+                            },
+                            {
+                                name: "MTN Swaziland",
+                                rname: "rel2"
+                            }
                             ]
                         }]
                     }
@@ -138,7 +173,7 @@
                             }
                         }
                     </style>
-                    <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item" relation-key="">
+                    <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item" relation-key="relationType">
                         <template>
                             <custom-node data="{{item}}" show-children="[[showChildren]]"></custom-node>
                         </template>
@@ -148,76 +183,104 @@
                     var target2 = document.getElementById('hierarchy-custom');
                     var data2 = {
                         name: "MTN Holdings",
+                        parent: [{
+                            name: "Parent One",
+                            relationType: "super one",
+                            parent: [{
+                                name: "Parent Three",
+                                relationType: "super three",
+                            },
+                            {
+                                name: "Parent Four",
+                                relationType: "super four",
+                                parent: [{
+                                    name: "Parent Six",
+                                    relationType: "super six",
+                                },
+                                {
+                                    name: "Parent Seven",
+                                    relationType: "super seven",
+                                }]
+                            }]
+                        },
+                        {
+                            name: "Parent Two",
+                            relationType: "super two",
+                            parent: [{
+                                name: "Parent Five",
+                                relationType: "super five",
+                            }]
+                        }],
                         children: [{
                             name: "MTN Intl",
                             relationType: "rel one",
                             children: [{
-                                    name: "MTN Marutis",
-                                    relationType: "rel two",
-                                    id: "GPIF003",
-                                    type: "GPIF",
+                                name: "MTN Marutis",
+                                relationType: "rel two",
+                                id: "GPIF003",
+                                type: "GPIF",
+                                children: [{
+                                    name: "MTN Telecom",
+                                    relationType: "rel three",
+                                    id: "GCIF001",
+                                    type: "GCIF",
                                     children: [{
-                                        name: "MTN Telecom",
-                                        relationType: "rel three",
-                                        id: "GCIF001",
-                                        type: "GCIF",
-                                        children: [{
-                                                name: "MTN Nigeria",
-                                                relationType: "rel four",
-                                                id: "ECIF005",
-                                                type: "ECIF"
-                                            },
-                                            {
-                                                name: "MTN Uganda",
-                                                relationType: "rel five",
-                                                id: "ECIF006",
-                                                type: "ECIF"
-                                            }
-                                        ]
+                                        name: "MTN Nigeria",
+                                        relationType: "rel four",
+                                        id: "ECIF005",
+                                        type: "ECIF"
+                                    },
+                                    {
+                                        name: "MTN Uganda",
+                                        relationType: "rel five",
+                                        id: "ECIF006",
+                                        type: "ECIF"
+                                    }
+                                    ]
+                                }]
+                            },
+                            {
+                                name: "Investcom llc",
+                                relationType: "rel six",
+                                id: "GPIF004",
+                                type: "GPIF"
+                            },
+                            {
+                                name: "MTN Dubai",
+                                relationType: "rel seven",
+                                id: "GPIF005",
+                                type: "GPIF",
+                                children: [{
+                                    name: "MTN Telecom (Dubai)",
+                                    relationType: "rel eight",
+                                    id: "GCIF002",
+                                    type: "GCIF",
+                                    children: [{
+                                        name: "MTN Ghana",
+                                        relationType: "rel nine",
+                                        id: "ECIF007",
+                                        type: "ECIF"
+                                    }, {
+                                        name: "MTN Sudan",
+                                        relationType: "rel ten",
+                                        id: "ECIF008",
+                                        type: "ECIF"
                                     }]
                                 },
                                 {
-                                    name: "Investcom llc",
-                                    relationType: "rel six",
-                                    id: "GPIF004",
-                                    type: "GPIF"
-                                },
-                                {
-                                    name: "MTN Dubai",
-                                    relationType: "rel seven",
-                                    id: "GPIF005",
-                                    type: "GPIF",
-                                    children: [{
-                                            name: "MTN Telecom (Dubai)",
-                                            relationType: "rel eight",
-                                            id: "GCIF002",
-                                            type: "GCIF",
-                                            children: [{
-                                                name: "MTN Ghana",
-                                                relationType: "rel nine",
-                                                id: "ECIF007",
-                                                type: "ECIF"
-                                            }, {
-                                                name: "MTN Sudan",
-                                                relationType: "rel ten",
-                                                id: "ECIF008",
-                                                type: "ECIF"
-                                            }]
-                                        },
-                                        {
-                                            name: "Mednet",
-                                            relationType: "rel eleven",
-                                            id: "ECIF004",
-                                            type: "ECIF"
-                                        }
-                                    ]
-                                },
-                                {
-                                    name: "MTN Swaziland",
-                                    relationType: "rel twelve",
-                                    id: "ECIF003",
+                                    name: "Mednet",
+                                    relationType: "rel eleven",
+                                    id: "ECIF004",
                                     type: "ECIF"
                                 }
+                                ]
+                            },
+                            {
+                                name: "MTN Swaziland",
+                                relationType: "rel twelve",
+                                id: "ECIF003",
+                                type: "ECIF"
+                            }
                             ]
                         }]
                     }
