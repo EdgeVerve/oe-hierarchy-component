@@ -43,7 +43,7 @@ CSS Variable | Description | Default
             }
         </style>
         <div class="component-container">
-            <template is="dom-if" if={{data}}>
+            <template is="dom-if" if={{data}} restamp id="container">
                 <oe-hierarchy-node data={{data}} label-key=[[labelKey]] children-key=[[childrenKey]] relation-key=[[relationKey]] node-template=[[_nodeTemplate]] actions=[[nodeActions]] unique-key=[[uniqueKey]]
                     node-data-as=[[nodeDataAs]] is-parent-node></oe-hierarchy-node>
             </template>
@@ -103,8 +103,9 @@ CSS Variable | Description | Default
                 data: {
                     type: Object,
                     value: function () {
-                        return {}
-                    }
+                        return null;
+                    },
+                    observer:'_dataChanged'
                 },
                 /**
                  * The property name containing the label in nodes.
@@ -173,6 +174,9 @@ CSS Variable | Description | Default
             },
             attached: function () {
                 this.selectedData = {};
+            },
+            _dataChanged:function(){
+                this.$.container.render();
             },
             _nodeItemSelected: function (event) {
                 var key = event.detail.key;
