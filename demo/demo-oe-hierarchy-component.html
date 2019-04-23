@@ -1,7 +1,5 @@
-<!--
-  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
-  Bangalore, India. All Rights Reserved.
--->
+<!-- ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+  Bangalore, India. All Rights Reserved. -->
 
 <!DOCTYPE html>
 <html>
@@ -9,15 +7,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <title>oe-hierarcy-component demo</title>
-    <link rel="import" href="../../polymer/polymer.html">
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../oe-hierarchy-component.html">
-    <link rel="import" href="custom-node.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles"></style>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <title>oe-hierarchy-component demo</title>
+    <script type="module">
+        import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
+        import '@polymer/iron-demo-helpers/demo-snippet';
+        import '@polymer/polymer/lib/elements/dom-bind';
+        import '@polymer/polymer/lib/elements/custom-style';
+
+    </script>
+    <script type="module" src="custom-node.js"></script>
+    <script type="module" src="../oe-hierarchy-component.js"></script>
+
+
 </head>
 
 <body unresolved>
@@ -25,270 +28,278 @@
         <h3>Hierarchy component</h3>
         <demo-snippet>
             <template>
-                <template is="dom-bind" id="hierarchy">
-                    <oe-hierarchy-component id="hierarchy-component" data={{data}} node-actions="[[nodeActions]]" label-key="name" relation-key="rname">
-                    </oe-hierarchy-component>
-                    <div hidden=[[!showEvent]]>
-                        <label>Event Name : [[eventName]]</label>
-                        <hr>
-                        <label>Event Detail</label>
-                        <pre>
+                <dom-bind id="hierarchy">
+                    <template>
+                        <oe-hierarchy-component id="hierarchy-component" data={{data}} node-actions="[[nodeActions]]" label-key="name" relation-key="rname">
+                        </oe-hierarchy-component>
+                        <div hidden=[[!showEvent]]>
+                            <label>Event Name : [[eventName]]</label>
+                            <hr>
+                            <label>Event Detail</label>
+                            <pre>
 [[eventData]]
                     </pre>
-                    </div>
-                </template>
-                <script>
-                    var target = document.getElementById('hierarchy');
-                    target.set('showEvent', false);
-
-
-                    var data = {
-                        name: "MTN Holdings",
-                        parent: [{
-                            name: "One",
-                            rname: "one",
-                            parent: [{
-                                name: "Three",
-                                rname: "three",
+                        </div>
+                        <script>
+                            var target = document.querySelector('#hierarchy');
+                            target.set('showEvent', false);
+                            var data = {
+                                name: "MTN Holdings",
                                 parent: [{
-                                    name: "Seven",
-                                    rname: "Seven"
+                                    name: "One",
+                                    rname: "one",
+                                    parent: [{
+                                        name: "Three",
+                                        rname: "three",
+                                        parent: [{
+                                            name: "Seven",
+                                            rname: "Seven"
+                                        }, {
+                                            name: "Eight",
+                                            rname: "Eight"
+                                        }]
+                                    }, {
+                                        name: "Four",
+                                        rname: "four"
+                                    }]
                                 }, {
-                                    name: "Eight",
-                                    rname: "Eight"
-                                }]
-                            }, {
-                                name: "Four",
-                                rname: "four"
-                            }]
-                        }, {
-                            name: "Two",
-                            rname: "two",
-                            parent: [{
-                                name: "Five",
-                                rname: "five"
-                            }, {
-                                name: "Six",
-                                rname: "six"
-                            }]
-                        }],
-                        children: [{
-                            name: "MTN Intl",
-                            rname: "relation one",
-                            parent: [{
-                                name: "Five",
-                                rname: "five"
-                            }, {
-                                name: "Six",
-                                rname: "six"
-                            }],
-                            children: [{
-                                name: "MTN Marutis",
-                                rname: "rel two",
+                                    name: "Two",
+                                    rname: "two",
+                                    parent: [{
+                                        name: "Five",
+                                        rname: "five"
+                                    }, {
+                                        name: "Six",
+                                        rname: "six"
+                                    }]
+                                }],
                                 children: [{
-                                    name: "MTN Telecom",
-                                    rname: "relation three",
+                                    name: "MTN Intl",
+                                    rname: "relation one",
+                                    parent: [{
+                                        name: "Five",
+                                        rname: "five"
+                                    }, {
+                                        name: "Six",
+                                        rname: "six"
+                                    }],
                                     children: [{
-                                        name: "MTN Nigeria",
-                                        rname: "relation four with big name"
+                                        name: "MTN Marutis",
+                                        rname: "rel two",
+                                        children: [{
+                                            name: "MTN Telecom",
+                                            rname: "relation three",
+                                            children: [{
+                                                name: "MTN Nigeria",
+                                                rname: "relation four with big name"
+                                            },
+                                            {
+                                                name: "MTN Uganda",
+                                                rname: "rel4",
+                                            }
+                                            ]
+                                        }]
                                     },
                                     {
-                                        name: "MTN Uganda",
-                                        rname: "rel4",
+                                        name: "Investcom llc",
+                                        rname: "rel2"
+                                    },
+                                    {
+                                        name: "MTN Dubai",
+                                        rname: "rel2",
+                                        children: [{
+                                            name: "MTN Telecom (Dubai)",
+                                            rname: "rel3",
+                                            children: [{
+                                                name: "MTN Ghana",
+                                                rname: "rel4"
+                                            }, {
+                                                name: "MTN Sudan",
+                                                rname: "rel4"
+                                            }]
+                                        },
+                                        {
+                                            name: "Mednet",
+                                            rname: "rel3"
+                                        }
+                                        ]
+                                    },
+                                    {
+                                        name: "MTN Swaziland",
+                                        rname: "rel2"
                                     }
                                     ]
                                 }]
-                            },
-                            {
-                                name: "Investcom llc",
-                                rname: "rel2"
-                            },
-                            {
-                                name: "MTN Dubai",
-                                rname: "rel2",
-                                children: [{
-                                    name: "MTN Telecom (Dubai)",
-                                    rname: "rel3",
-                                    children: [{
-                                        name: "MTN Ghana",
-                                        rname: "rel4"
-                                    }, {
-                                        name: "MTN Sudan",
-                                        rname: "rel4"
-                                    }]
-                                },
-                                {
-                                    name: "Mednet",
-                                    rname: "rel3"
-                                }
-                                ]
-                            },
-                            {
-                                name: "MTN Swaziland",
-                                rname: "rel2"
                             }
-                            ]
-                        }]
-                    }
-                    var actions = [{
-                        icon: "add",
-                        event: "add-node",
-                        label: "Add new node"
-                    }, {
-                        icon: "create",
-                        event: "edit-node",
-                        label: "Edit node"
-                    }]
-                    target.set('data', data);
-                    target.set('nodeActions', actions);
-                    Polymer.Base.async(function () {
-                        var component = document.getElementById('hierarchy-component');
+                            var actions = [{
+                                icon: "add",
+                                event: "add-node",
+                                label: "Add new node"
+                            }, {
+                                icon: "create",
+                                event: "edit-node",
+                                label: "Edit node"
+                            }]
+                            target.set('data', data);
+                            target.set('nodeActions', actions);
 
-                        function eventSetter(event) {
-                            target.set('showEvent', true);
-                            target.set('eventName', event.type);
-                            target.set('eventData', JSON.stringify(event.detail, null, 2));
-                        }
-                        var eventList = ['node-selected', 'pre-connector-selected', 'post-connector-selected',
-                            'remove-node', 'unlink-child-node', 'unlink-all-child-node', 'deselect-item'
-                        ];
-                        eventList.forEach(function (evName) {
-                            component.addEventListener(evName, eventSetter);
-                        })
-                    }, 300);
-                </script>
-            </template>
-        </demo-snippet>
-        <h3>Hierarchy component with customized node</h3>
-        <demo-snippet>
-            <template>
-                <template is="dom-bind" id="hierarchy-custom">
-                    <style is="custom-style">
-                        #hierarchy-custom-component {
-                            --oe-connector-color: red;
-                            --oe-connector-thickness: 2px;
-                            --oe-connector-selected: green;
-                            --oe-node-item: {
-                                border-radius: 4px;
+                            var component = document.querySelector('#hierarchy-component');
+
+                            function eventSetter(event) {
+                                target.set('showEvent', true);
+                                target.set('eventName', event.type);
+                                target.set('eventData', JSON.stringify(event.detail, null, 2));
                             }
-                        }
-                    </style>
-                    <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item" relation-key="relationType">
-                        <template>
-                            <custom-node data="{{item}}" show-children="[[showChildren]]"></custom-node>
-                        </template>
-                    </oe-hierarchy-component>
-                </template>
-                <script>
-                    var target2 = document.getElementById('hierarchy-custom');
-                    var data2 = {
-                        name: "MTN Holdings",
-                        parent: [{
-                            name: "Parent One",
-                            relationType: "super one",
-                            parent: [{
-                                name: "Parent Three",
-                                relationType: "super three",
-                            },
-                            {
-                                name: "Parent Four",
-                                relationType: "super four",
-                                parent: [{
-                                    name: "Parent Six",
-                                    relationType: "super six",
-                                },
-                                {
-                                    name: "Parent Seven",
-                                    relationType: "super seven",
-                                }]
-                            }]
-                        },
-                        {
-                            name: "Parent Two",
-                            relationType: "super two",
-                            parent: [{
-                                name: "Parent Five",
-                                relationType: "super five",
-                            }]
-                        }],
-                        children: [{
-                            name: "MTN Intl",
-                            relationType: "rel one",
-                            children: [{
-                                name: "MTN Marutis",
-                                relationType: "rel two",
-                                id: "GPIF003",
-                                type: "GPIF",
-                                children: [{
-                                    name: "MTN Telecom",
-                                    relationType: "rel three",
-                                    id: "GCIF001",
-                                    type: "GCIF",
-                                    children: [{
-                                        name: "MTN Nigeria",
-                                        relationType: "rel four",
-                                        id: "ECIF005",
-                                        type: "ECIF"
-                                    },
-                                    {
-                                        name: "MTN Uganda",
-                                        relationType: "rel five",
-                                        id: "ECIF006",
-                                        type: "ECIF"
-                                    }
-                                    ]
-                                }]
-                            },
-                            {
-                                name: "Investcom llc",
-                                relationType: "rel six",
-                                id: "GPIF004",
-                                type: "GPIF"
-                            },
-                            {
-                                name: "MTN Dubai",
-                                relationType: "rel seven",
-                                id: "GPIF005",
-                                type: "GPIF",
-                                children: [{
-                                    name: "MTN Telecom (Dubai)",
-                                    relationType: "rel eight",
-                                    id: "GCIF002",
-                                    type: "GCIF",
-                                    children: [{
-                                        name: "MTN Ghana",
-                                        relationType: "rel nine",
-                                        id: "ECIF007",
-                                        type: "ECIF"
-                                    }, {
-                                        name: "MTN Sudan",
-                                        relationType: "rel ten",
-                                        id: "ECIF008",
-                                        type: "ECIF"
-                                    }]
-                                },
-                                {
-                                    name: "Mednet",
-                                    relationType: "rel eleven",
-                                    id: "ECIF004",
-                                    type: "ECIF"
-                                }
-                                ]
-                            },
-                            {
-                                name: "MTN Swaziland",
-                                relationType: "rel twelve",
-                                id: "ECIF003",
-                                type: "ECIF"
-                            }
-                            ]
-                        }]
-                    }
-                    target2.set('data', data2);
-                </script>
+                            var eventList = ['node-selected', 'pre-connector-selected', 'post-connector-selected',
+                                'remove-node', 'unlink-child-node', 'unlink-all-child-node', 'deselect-item'
+                            ];
+                            eventList.forEach(function (evName) {
+                                component.addEventListener(evName, eventSetter);
+                            });
+
+                        </script>
+                    </template>
+                </dom-bind>
             </template>
         </demo-snippet>
     </div>
+    <div class="vertical-section-container">
+        <h3>Hierarchy component with customized node</h3>
+        <demo-snippet>
+            <template>
+                <dom-bind id="hierarchy-custom">
+                    <template>
+
+                        <custom-style>
+                            <style>
+                                #hierarchy-custom-component {
+                                    --oe-connector-color: red;
+                                    --oe-connector-thickness: 2px;
+                                    --oe-connector-selected: green;
+                                    --oe-node-item: {
+                                        border-radius: 4px;
+                                    }
+                                }
+                            </style>
+                        </custom-style>
+                        <oe-hierarchy-component id="hierarchy-custom-component" data="{{data}}" node-data-as="item" relation-key="relationType">
+                            <template>
+                            <custom-node data="{{item}}" show-children="[[showChildren]]"></custom-node>
+                        </template>
+                        </oe-hierarchy-component>
+                        <script>
+                            var target2 = document.querySelector('#hierarchy-custom');
+                            var data2 = {
+                                name: "MTN Holdings",
+                                parent: [{
+                                    name: "Parent One",
+                                    relationType: "super one",
+                                    parent: [{
+                                        name: "Parent Three",
+                                        relationType: "super three",
+                                    },
+                                    {
+                                        name: "Parent Four",
+                                        relationType: "super four",
+                                        parent: [{
+                                            name: "Parent Six",
+                                            relationType: "super six",
+                                        },
+                                        {
+                                            name: "Parent Seven",
+                                            relationType: "super seven",
+                                        }]
+                                    }]
+                                },
+                                {
+                                    name: "Parent Two",
+                                    relationType: "super two",
+                                    parent: [{
+                                        name: "Parent Five",
+                                        relationType: "super five",
+                                    }]
+                                }],
+                                children: [{
+                                    name: "MTN Intl",
+                                    relationType: "rel one",
+                                    children: [{
+                                        name: "MTN Marutis",
+                                        relationType: "rel two",
+                                        id: "GPIF003",
+                                        type: "GPIF",
+                                        children: [{
+                                            name: "MTN Telecom",
+                                            relationType: "rel three",
+                                            id: "GCIF001",
+                                            type: "GCIF",
+                                            children: [{
+                                                name: "MTN Nigeria",
+                                                relationType: "rel four",
+                                                id: "ECIF005",
+                                                type: "ECIF"
+                                            },
+                                            {
+                                                name: "MTN Uganda",
+                                                relationType: "rel five",
+                                                id: "ECIF006",
+                                                type: "ECIF"
+                                            }
+                                            ]
+                                        }]
+                                    },
+                                    {
+                                        name: "Investcom llc",
+                                        relationType: "rel six",
+                                        id: "GPIF004",
+                                        type: "GPIF"
+                                    },
+                                    {
+                                        name: "MTN Dubai",
+                                        relationType: "rel seven",
+                                        id: "GPIF005",
+                                        type: "GPIF",
+                                        children: [{
+                                            name: "MTN Telecom (Dubai)",
+                                            relationType: "rel eight",
+                                            id: "GCIF002",
+                                            type: "GCIF",
+                                            children: [{
+                                                name: "MTN Ghana",
+                                                relationType: "rel nine",
+                                                id: "ECIF007",
+                                                type: "ECIF"
+                                            }, {
+                                                name: "MTN Sudan",
+                                                relationType: "rel ten",
+                                                id: "ECIF008",
+                                                type: "ECIF"
+                                            }]
+                                        },
+                                        {
+                                            name: "Mednet",
+                                            relationType: "rel eleven",
+                                            id: "ECIF004",
+                                            type: "ECIF"
+                                        }
+                                        ]
+                                    },
+                                    {
+                                        name: "MTN Swaziland",
+                                        relationType: "rel twelve",
+                                        id: "ECIF003",
+                                        type: "ECIF"
+                                    }
+                                    ]
+                                }]
+                            }
+                            target2.set('data', data2);
+                        </script>
+                    </template>
+                </dom-bind>
+            </template>
+        </demo-snippet>
+    </div>
+
 </body>
 
 </html>
