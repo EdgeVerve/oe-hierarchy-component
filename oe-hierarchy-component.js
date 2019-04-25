@@ -123,8 +123,8 @@ class OeHierarchyComponent extends OECommonMixin(PolymerElement) {
             preConnectorWidth: {
                 type: Number,
                 value: 0
-            },
-          
+            }
+
             /**
          * Fired when connector before a node is selected.
          *
@@ -194,13 +194,15 @@ class OeHierarchyComponent extends OECommonMixin(PolymerElement) {
         this.$.container.render();
     }
     _nodeItemSelected(event) {
+        var self = this;
         var key = event.detail.key;
-        if (key !== this.selectedData.key) {
-            var prevSelected = this.querySelector('[key="' + this.selectedData.key + '"]');
+        var curSelected;
+        if (key !== self.selectedData.key) {
+            var prevSelected = event.detail.node.querySelector('[key="' + self.selectedData.key + '"]');
             if (prevSelected) {
                 prevSelected.classList.remove('selected');
             }
-            var curSelected = this.querySelector('[key="' + key + '"]');
+            curSelected = event.detail.node.shadowRoot.querySelector('[key="' + key + '"]');
             if (curSelected) {
                 curSelected.classList.add('selected');
                 var selected = {
@@ -209,10 +211,10 @@ class OeHierarchyComponent extends OECommonMixin(PolymerElement) {
                     node: event.detail.node,
                     type: curSelected.id
                 };
-                this.set('selectedData', selected);
+                self.set('selectedData', selected);
 
                 var eventName = "";
-                switch (this.selectedData.type) {
+                switch (self.selectedData.type) {
                     case "pre-connector":
                         eventName = "pre-connector-selected";
                         break;
@@ -225,14 +227,15 @@ class OeHierarchyComponent extends OECommonMixin(PolymerElement) {
                     default:
                         eventName = "selection-changed";
                 }
-                this.fire(eventName, {
-                    node: this.selectedData.data,
-                    parent: this.selectedData.node.parentData
+                self.fire(eventName, {
+                    node: self.selectedData.data,
+                    parent: self.selectedData.node.parentData
                 });
             }
         }
-        this.listen(document, 'keydown', '_keyDownListener');
+        self.addEventListener('keydown', e => this._keyDownListener(e));
     }
+   
     _keyDownListener(event) {
         var key = event.key;
         if (key === "Delete") {
@@ -257,29 +260,34 @@ class OeHierarchyComponent extends OECommonMixin(PolymerElement) {
         }
     }
     _resetSelected(event) {
-        var prevSelected = this.querySelector('[key="' + this.selectedData.key + '"]');
-        if (prevSelected) {
-            prevSelected.classList.remove('selected');
+        var self = this;
+        var node = self.selectedData.node;
+        if(node){
+            var prevSelected = node.shadowRoot.querySelector('[key="' + self.selectedData.key + '"]');
+            if (prevSelected) {
+                prevSelected.classList.remove('selected');
+            }
+            self.set('selectedData', {});
+            self.fire('deselect-item');
+            self.removeEventListener('keydown', e => self._keyDownListener(e));
         }
-        this.set('selectedData', {});
-        this.fire('deselect-item');
-        this.unlisten(document, 'keydown', '_keyDownListener');
+       
     }
     _updatePreConnectorWidth(event) {
         if (this.preConnectorWidth < event.detail.width) {
             this.set('preConnectorWidth', event.detail.width);
-           // getComputedStyle(this).getPropertyValue('--connector-width') = this.preConnectorWidth + 'px';
-        //    this.updateStyles({
-        //     '--connector-width': this.preConnectorWidth + 'px',
-        //   });
-        this.changeTheme();
+            // getComputedStyle(this).getPropertyValue('--connector-width') = this.preConnectorWidth + 'px';
+            //    this.updateStyles({
+            //     '--connector-width': this.preConnectorWidth + 'px',
+            //   });
+            this.changeTheme();
         }
     }
-   changeTheme() {
-          this.updateStyles({
+    changeTheme() {
+        this.updateStyles({
             '--connector-width': this.preConnectorWidth + 'px',
-          });
-        }
-    
+        });
+    }
+
 }
 window.customElements.define(OeHierarchyComponent.is, OeHierarchyComponent);

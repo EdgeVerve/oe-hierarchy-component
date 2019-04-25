@@ -37,7 +37,6 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
                 display: block;
                 box-sizing: border-box;
                 --animation-time: 0ms;
-                --connector-thickness: 4px;
                 --pre-connector-relation-bg: #ffffff;
             }
 
@@ -91,7 +90,7 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
             .node-detail-container #pre-connector {
                 width: var(--pre-connector-width);
                 height: var(--connector-thickness);
-                left: var(--pre-connector-width);
+                left: calc(var(--pre-connector-width) * -1);
                 cursor: pointer;
             }
 
@@ -99,7 +98,12 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
                 padding: 0px 2px;
                 background-color: var(--pre-connector-relation-bg);
             }
-
+            #pre-connector[hidden] {
+                visibility: hidden;
+            }
+            #post-connector[hidden] {
+                visibility: hidden;
+            }
             .node-detail-container #post-connector {
                 width: 32px;
                 height: var(--connector-thickness);
@@ -120,7 +124,7 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
             #connector {
                 width: var(--connector-thickness);
                 height: 0px;
-                left: -var(--pre-connector-width);
+                left: calc(var(--pre-connector-width) * -1);
                 top: calc(var(--connector-thickness) + 72px);
                 transition: height var(--animation-time);
             }
@@ -147,6 +151,9 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
                 width: 0;
                 opacity: 0;
                 transition: opacity 300ms;
+            }
+            #action-panelId[hidden] {
+                visibility: hidden;
             }
 
             .action-panel paper-icon-button,
@@ -188,8 +195,8 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
                 </div>
             </div>
             <div class="current-node-detail">
-                <div class="node-detail-container">
-                    <div class="action-panel layout horizontal around-justified center" hidden=[[!actions.length]]>
+                <div class="node-detail-container">             
+                    <div id="action-panelId" class="action-panel layout horizontal around-justified center" hidden=[[!actions.length]]>
                         <paper-menu-button no-animations id="menuBtn" vertical-offset="20" horizontal-offset="-5">
                             <paper-icon-button icon="more-vert" class="dropdown-trigger" slot="dropdown-trigger"></paper-icon-button>
                             <paper-listbox class="dropdown-content" slot="dropdown-content">
@@ -200,10 +207,10 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
                                     </paper-item>
                                 </template>
                             </paper-listbox>
-                        </paper-menu-button>
+                        </paper-menu-button>                  
                     </div>
                     <div id="pre-connector" key$="pre-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable layout horizontal center-center"
-                        hidden="[[!__showConnector(showParent,'pre',isChild,data.*,parentKey)]]">
+                        hidden$="[[!__showConnector(showParent,'pre',isChild,data.*)]]">
                         <label>[[_getConditionalValue(data, relationKey, isParent,isParentNode)]]</label>
                     </div>
                     <div class="node-detail selectable" key$="node-[[uniqueId]]" id="node-detail" on-tap="_selectElement">
@@ -212,7 +219,7 @@ class OeHierarchyNode extends mixinBehaviors([Templatizer],PolymerElement) {
                         </div>
                     </div>
                     <div id="post-connector" key$="post-[[uniqueId]]" on-tap="_selectElement" class="connector-lines selectable layout horizontal center-center"
-                        hidden="[[!__showConnector(showChildren,'post',isParent,data.*,childrenKey)]]">
+                        hidden$="[[!__showConnector(showChildren,'post',isParent,data.*)]]">
                         <label>[[_getConditionalValue(data, relationKey, isChild,isParentNode)]]</label>
                     </div>
                 </div>
