@@ -10,12 +10,13 @@
 * the maximum extent possible under the law.
 */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { OECommonMixin } from "oe-mixins/oe-common-mixin.js";
 import '@polymer/polymer/lib/elements/dom-bind';
 import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
 import "@polymer/iron-flex-layout/iron-flex-layout.js";
 import "@polymer/iron-flex-layout/iron-flex-layout-classes.js";
 
-window.customElements.define("custom-node", class extends PolymerElement {
+window.customElements.define("custom-node", class extends OECommonMixin(PolymerElement) {
     static get template() {
         return html`
             <style include="iron-flex iron-flex-alignment">
