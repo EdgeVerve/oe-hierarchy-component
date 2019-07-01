@@ -7,24 +7,24 @@
 
 <head>
   <meta charset="utf-8">
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script>
-      WCT = {
-        mochaOptions: {
-          timeout: 20 * 1000
-        }
-      }
-  </script>
-  <script src="../../web-component-tester/browser.js"></script>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+
 </head>
 
 <body>
-  <script>
-    WCT.loadSuites([ //eslint-disable-line no-undef
-      'oe-hierarchy-component.html'
-    ]);
 
+  <script>
+    // Load and run all tests (.html, .js):
+    WCT.loadSuites([
+      'oe-hierarchy-component.html',
+    ]);
   </script>
+
 </body>
 
 </html>

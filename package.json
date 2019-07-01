@@ -1,0 +1,42 @@
+{
+  "name": "oe-hierarchy-component",
+  "main": "oe-hierarchy-component.js",
+  "description": "Hierarchy tree component",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "2.0.0",
+  "scripts": {
+    "test": "polymer test --module-resolution node --skip-selenium-install",
+    "lint": "eslint .",
+    "doc": "polymer analyze *.js > analysis.json"
+  },
+  "dependencies": {
+    "@polymer/iron-flex-layout": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.2",
+    "@polymer/paper-item": "^3.0.1",
+    "@polymer/paper-listbox": "^3.0.1",
+    "@polymer/paper-menu-button": "^3.0.1",
+    "@polymer/polymer": "3.1.0",
+    "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#master",
+    "oe-utils": "git+http://evgit/oecloud.io/oe-utils.git#master"
+  },
+  "devDependencies": {
+    "@polymer/iron-component-page": "4.0.1",
+    "@polymer/iron-demo-helpers": "3.0.2",
+    "@polymer/iron-test-helpers": "3.0.1",
+    "@webcomponents/webcomponentsjs": "2.2.7",
+    "fakerest": "2.1.0",
+    "@polymer/test-fixture": "4.0.2",
+    "axe-core": "3.1.2",
+    "chai": "4.2.0",
+    "mocha": "5.2.0",
+    "sinon": "7.2.3",
+    "wct-mocha": "1.0.0"
+  }
+}
