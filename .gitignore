@@ -23,3 +23,5 @@ npm-debug.log
 /nodered/.config.json
 /storage/**node_modules
 **/bower_components
+node_modules
+package-lock.json
