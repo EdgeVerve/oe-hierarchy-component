@@ -10,7 +10,7 @@
     "test",
     "tests"
   ],
-  "version": "2.1.0",
+  "version": "2.2.0",
   "scripts": {
     "test": "polymer test --module-resolution node --skip-selenium-install",
     "lint": "eslint .",
@@ -23,8 +23,8 @@
     "@polymer/paper-listbox": "^3.0.1",
     "@polymer/paper-menu-button": "^3.0.1",
     "@polymer/polymer": "^3.1.0",
-    "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#master",
-    "oe-utils": "git+http://evgit/oecloud.io/oe-utils.git#master"
+    "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#2.2.0",
+    "oe-utils": "git+http://evgit/oecloud.io/oe-utils.git#2.2.0"
   },
   "devDependencies": {
     "@polymer/iron-component-page": "^4.0.1",
