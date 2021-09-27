@@ -1,8 +1,5 @@
 {
   "name": "oe-hierarchy-component",
-  "authors": [
-    "Gowtham <gowtham_d02@edgeverve.com>"
-  ],
   "description": "Hierarchy tree component",
   "main": "",
   "license": "MIT",
